@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Edit Modal Starts -->
+  <!-- Modal -->
+  <!-- <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit this Item</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="" method="POST">
+        {% csrf_token %}
+        <div class="modal-body">
+          <input type="hidden" name="snoEdit" id="snoEdit">
+          <div class="form-group">
+            <label for="title">Item Name</label>
+            <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp">
+          </div>
+
+          <div class="form-group">
+            <label for="company">Company Name</label>
+            <input type="text" class="form-control" id="companyEdit" name="companyEdit" aria-describedby="emailHelp">
+          </div>
+
+          <div class="form-group">
+            <label for="desc">Item Description</label>
+            <textarea class="form-control" id="descriptionEdit" name="descriptionEdit" rows="3"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="cost">Cost</label>
+            <input type="number" class="form-control" id="costEdit" name="costEdit" aria-describedby="emailHelp">
+          </div>
+
+          <div class="form-group">
+            <label for="manudate">Item Manufacturing Date</label>
+            <input class="form-control" type="date" id="manudateEdit" name="manudateEdit">
+          </div>
+          <div class="form-group">
+            <label for="expdate">Item Expiry Date</label>
+            <input class="form-control" type="date" id="expdateEdit" name="expdateEdit">
+          </div> 
+        </div>
+        <div class="modal-footer d-block mr-auto">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> -->
+<!-- Edit Modal Ends -->
+
+<h1 class="text-white text-center">BE MY EYE</h1>
+<h5 class="text-white text-center"><i>Help The People See Through Others Eye</i></h5>
+<div class="container my-4 text-white">
+<h3>Add an Item to Database</h3>
+<form method="POST" action="{% url 'saveInformation' %}">
+
+  {% csrf_token %}
+  
+  <div class="form-group">
+    <label for="title">Item Name</label>
+    <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp" minlength="4" required>
+  </div>
+
+  <div class="form-group">
+    <label for="company">Company Name</label>
+    <input type="text" class="form-control" id="company" name="company" minlength="5" required>
+  </div>
+
+  <div class="form-group">
+    <label for="desc">Item Description</label>
+    <textarea class="form-control" id="description" name="description" rows="3" minlength="10" required></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="cost">Cost</label>
+    <input type="number" class="form-control" id="cost" name="cost" required>
+  </div>
+
+  <div class="form-group">
+    <label for="manudate">Item Manufacturing Date</label>
+    <input class="form-control" type="date" id="manudate" name="manudate" required>
+  </div>
+  <div class="form-group">
+    <label for="expdate">Item Expiry Date</label>
+    <input class="form-control" type="date" id="expdate" name="expdate" required>
+  </div>
+  <!-- <div class="form-group">
+    <label for="img">Select image:</label>
+    <input class="form-control" type="file" id="img" name="img" accept="/media/">
+    <button type="submit" class="btn btn-primary mt-2">Primary</button>
+  </div> -->
+  <button type="submit" class="btn mt-3 btn-success">Add Item</button>
+</form>
+</div>
+
+
+<div class="container my-4">
+
+  <form class="d-flex mb-2 float-end" method="GET" role="search">
+    <input class="form-control me-2" name="titlesearch" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  
+<table class="table text-white" id="myTable">
+  <thead>
+    <tr>
+      <th scope="col">S.no</th>
+      <th scope="col">Name</th>
+      <th scope="col">Company Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Cost</th>
+      <th scope="col">Manufacturing Date</th>
+      <th scope="col">Expiry Date</th>
+      <th scope="col">Product Image</th>
+      <th scope="col">QR Code</th>
+      <!-- <th scope="col">Actions</th> -->
+    </tr>
+  </thead>
+  {% for product in informationData %}
+  <tr>
+    <td><b>{{product.id}}</b></td>
+    <td><b>{{product.product_name | capfirst}}</b></td>
+    <td><b>{{product.company_name | capfirst}}</b></td>
+    <td><b>{{product.product_description | capfirst}}</b></td>
+    <td><b>₹{{product.product_cost | capfirst}}</b></td>
+    <td><b>{{product.manu_date}}</b></td>
+    <td><b>{{product.exp_date}}</b></td>
+    <td><a href="http://127.0.0.1:8000/media/{{product.product_image}}"><img src="/media/{{product.product_image}}" class="img-fluid" width="150px" height="100px"/></a></td>
+    <td><a href="http://127.0.0.1:8000/media/{{product.qr_code}}"><img src="/media/{{product.qr_code}}" class="img-fluid" width="150px" height="100px"/></a></td>
+    <td style='white-space: nowrap'>
+      <!-- <button class='edit btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#editModal'>Edit</button>
+      <button class='delete btn btn-sm btn-alert mx-2' style="background-color: red; color: white;">Delete</button></td> -->
+    <!-- <a href='https://chart.googleapis.com/chart?cht=qr&chl=The+Name+Of+The+Product+Is+".$rows['title'].". The+Company+Of+The+Product+Is+".$rows['companyName'].". ".$rows['description'].". The+Cost+Of+The+Product+Is+".$rows['Cost']."+Rupees. The+Manufacturing+Date+Of+The+Product+Is+".$rows['ManufacturingDate'].". The+Expiry+Date+Of+The+Product+Is+".$rows['ExpiryDate'].".&chs=160x160&chld=L|0' target='_blank' class='btn btn-primary'>QR Code</a> -->
+  </tr>
+</div>
+  {% empty %}
+    <div class="alert alert-danger" role="alert">
+      No Data Found!!
+    </div>
+  {% endfor %}
+  <tbody>
+    <nav aria-label="...">
+      <ul class="pagination">
+        {% if informationData.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="/?page=1">First</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="/?page={{informationData.previous_page_number}}">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for i in totalPageList %}
+        <li class="page-item">
+          <a class="page-link" href="/?page={{i}}">{{i}}</a>
+        </li>
+        {% endfor %}
+
+        {% if informationData.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="/?page={{informationData.next_page_number}}">Next</a>
+        </li>
+
+        <li class="page-item">
+          <a class="page-link" href="/?page={{lastPage}}">Last</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    <!-- <script>
+    edits = document.getElementsByClassName('edit');
+    Array.from(edits).forEach((element) => {
+      element.addEventListener("click", (e) => {
+        // console.log("edit ");
+        tr = e.target.parentNode.parentNode;
+        title = tr.getElementsByTagName("td")[1].innerText;
+        company = tr.getElementsByTagName("td")[2].innerText;
+        description = tr.getElementsByTagName("td")[3].innerText;        
+        cost = tr.getElementsByTagName("td")[4].innerText;
+        console.log(cost);
+        manudate = tr.getElementsByTagName("td")[5].innerText;
+        expdate = tr.getElementsByTagName("td")[6].innerText;
+        // console.log(title, description, cost);
+        titleEdit.value = title;
+        companyEdit.value = company;
+        descriptionEdit.value = description;
+        costEdit.value = cost;
+        manudateEdit.value = manudate;
+        expdateEdit.value = expdate;
+        snoEdit.value = e.target.id;
+      })
+    })
+</script> -->
+  {% endblock %}
